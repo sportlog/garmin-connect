@@ -36,13 +36,14 @@ use Sportlog\GarminConnect\GarminConnect;
 use Sportlog\GarminConnect\FileTokenStorage;
 use Sportlog\GarminConnect\Queries\GarminConnectQueryFactory;
 
-// You can optionally provide your own implementation of TokenStorageInterface
-// and/or a PSR-3 Logger for debugging.
+// You need to supply the Garmin user name.
 // This example uses the built in FileTokenStorage. You must ensure that the directory
-// exists and is writable for your webserver user.
-$garminConnect = new GarminConnect(new FileTokenStorage(join(DIRECTORY_SEPARATOR, [getcwd(), '.garminconnect'])));
-// call login with username and pwd
-$connectResult = $garminConnect->login("<user>", "<pwd>");
+// exists and is writable for your webserver user. However You can provide your own
+// implementation of TokenStorageInterface and/or a PSR-3 Logger for debugging.
+$tokenStorage = new FileTokenStorage(join(DIRECTORY_SEPARATOR, [getcwd(), '.garminconnect']));
+$garminConnect = new GarminConnect("<user>", $tokenStorage);
+// call login with pwd
+$connectResult = $garminConnect->login("<pwd>");
 
 // Check status
 if ($connectResult->status === ConnectStatus::Connected) {
@@ -80,7 +81,7 @@ $mfaCode = $_REQUEST['mfa'];
 $csrfToken = $_REQUEST['csrf'];
 
 // resume login with MFA code and CSRF-token from pevious login() call
-$connectApi = $garminConnect->resumeLogin("<user>", $mfaCode, $csrfToken);
+$connectApi = $garminConnect->resumeLogin($mfaCode, $csrfToken);
 // Query some data
 $response = $connectApi->runQuery(GarminConnectQueryFactory::searchActivities());
 // Get the response result
