@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Sportlog\GarminConnect;
 
-use Exception;
 use Psr\Log\LoggerInterface;
 use Sportlog\GarminConnect\Queries\GarminConnectQuery;
 
 /**
  * Garmin Connect API access.
  */
-class GarminConnectApi implements GarminConnectApiInterface
+readonly class GarminConnectApi implements GarminConnectApiInterface
 {
     private readonly CurlRequestor $curlRequestor;
 
@@ -22,7 +21,7 @@ class GarminConnectApi implements GarminConnectApiInterface
      * @param OAuth2Token $token The OAuth2 token for authentication.
      * @param LoggerInterface $logger Logger for logging messages.
      */
-    public function __construct(private readonly string $id, private readonly OAuth2Token $token, private readonly LoggerInterface $logger)
+    public function __construct(private string $id, private OAuth2Token $token, private LoggerInterface $logger)
     {
         $this->curlRequestor = new CurlRequestor($this->id);
     }

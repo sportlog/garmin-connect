@@ -7,7 +7,7 @@ namespace Sportlog\GarminConnect\Queries;
 /**
  * Represents a Garmin Connect API query.
  */
-class GarminConnectQuery
+readonly class GarminConnectQuery
 {
     /**
      * Constructor.
@@ -17,9 +17,9 @@ class GarminConnectQuery
      * @param array $params Query parameters.
      */
     public function __construct(
-        private readonly string $method,
-        private readonly string $url,
-        private readonly array $params = []
+        private string $method,
+        private string $url,
+        private array $params = []
     ) {}
 
     /**
