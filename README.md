@@ -1,6 +1,6 @@
 # Garmin-connect
 
-A PHP (>= PHP 8) library to connect to the Garmin API. This is a port of [garth](https://github.com/matin/garth/).
+A PHP (>= PHP 8.2) library to connect to the Garmin API. This is a port of [garth](https://github.com/matin/garth/).
 
 ## Install via Composer
 
