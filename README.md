@@ -33,11 +33,14 @@ require 'vendor/autoload.php';
 
 use Sportlog\GarminConnect\ConnectStatus;
 use Sportlog\GarminConnect\GarminConnect;
+use Sportlog\GarminConnect\FileTokenStorage;
 use Sportlog\GarminConnect\Queries\GarminConnectQueryFactory;
 
 // You can optionally provide your own implementation of TokenStorageInterface
 // and/or a PSR-3 Logger for debugging.
-$garminConnect = new GarminConnect();
+// This example uses the built in FileTokenStorage. You must ensure that the directory
+// exists and is writable for your webserver user.
+$garminConnect = new GarminConnect(new FileTokenStorage(join(DIRECTORY_SEPARATOR, [getcwd(), '.garminconnect'])));
 // call login with username and pwd
 $connectResult = $garminConnect->login("<user>", "<pwd>");
 
