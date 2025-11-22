@@ -1,0 +1,39 @@
+{
+  "name": "sportlog/garmin-connect",
+  "description": "Authenticate to Garmin Connect and query data.",
+  "type": "library",
+  "version": "0.1",
+  "keywords": [
+    "connect api",
+    "garmin"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Johannes Aberidis"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Sportlog\\GarminConnect\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sportlog\\GarminConnect\\": "src/",
+      "Sportlog\\GarminConnect\\Test\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.10",
+    "phpunit/phpunit": "^9.6"
+  },
+  "require": {
+    "php": ">=8.0",
+    "psr/log": "^3.0"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --testsuite garmin-connect",
+    "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon"
+  }
+}
