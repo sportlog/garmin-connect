@@ -12,7 +12,7 @@ use Sportlog\GarminConnect\Queries\GarminConnectQuery;
  */
 readonly class GarminConnectApi implements GarminConnectApiInterface
 {
-    private readonly CurlRequestor $curlRequestor;
+    private CurlRequestor $curlRequestor;
 
     /**
      * Contructor.

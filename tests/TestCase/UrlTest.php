@@ -7,7 +7,7 @@ namespace Sportlog\GarminConnect\Test\TestCase;
 use PHPUnit\Framework\TestCase;
 use Sportlog\GarminConnect\Url;
 
-class UrlTestCase extends TestCase
+class UrlTest extends TestCase
 {
     public function testBuildUrlWithoutParams(): void
     {

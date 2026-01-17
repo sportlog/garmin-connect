@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sportlog\GarminConnect;
 
-use Exception;
 use OAuth;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -86,7 +86,7 @@ readonly class GarminConnect
     /**
      * Resumes the login process after multi-factor authentication (MFA) is required.
      */
-    public function resumeLogin(string $mfaCode, string $csrfToken): GarminConnectApi
+    public function resumeLogin(string $mfaCode, string $csrfToken): GarminConnectApiInterface
     {
         $id = $this->getId($this->username);
         $verify = $this->verify($mfaCode, $csrfToken);
@@ -167,7 +167,6 @@ readonly class GarminConnect
 
     private function getOAuth1Token(string $ticket): OAuth1Token
     {
-        $base_url = Constants::GARMIN_CONNECT_API_OAUTH . "/preauthorized";
         $params = [
             'ticket' => $ticket,
             'login-url' => Constants::GARMIN_SSO_EMBED,
@@ -176,7 +175,7 @@ readonly class GarminConnect
 
         /** @disregard P1009 Undefined type */
         $oAuth = new OAuth(Constants::CONSUMER_KEY, Constants::CONSUMER_SECRET);
-        $oauthHeader = $oAuth->getRequestHeader('GET', $base_url, $params);
+        $oauthHeader = $oAuth->getRequestHeader('GET', Constants::GARMIN_CONNECT_API_OAUTH_PREAUTHORIZED, $params);
         if ($oauthHeader === false) {
             throw new Exception("failed to generate OAuth1 signature");
         }
@@ -186,7 +185,7 @@ readonly class GarminConnect
             "User-Agent" => Constants::USER_AGENT
         ];
 
-        $response = $this->curlRequestor->get(Url::build($base_url, $params), headers: $headers);
+        $response = $this->curlRequestor->get(Url::build(Constants::GARMIN_CONNECT_API_OAUTH_PREAUTHORIZED, $params), headers: $headers);
         $this->logResponse("getOAuth1Token", $response);
 
         $data = [];
@@ -198,14 +197,13 @@ readonly class GarminConnect
     }
 
     private function exchange(OAuth1Token $oAuth1Token): OAuth2Token
-    {
-        $url = Constants::GARMIN_CONNECT_API_OAUTH . "/exchange/user/2.0";
 
+    {
         /** @disregard P1009 Undefined type */
         $oAuth = new OAuth(Constants::CONSUMER_KEY, Constants::CONSUMER_SECRET);
         $oAuth->setToken($oAuth1Token->getToken(), $oAuth1Token->getTokenSecret());
 
-        $oauthHeader = $oAuth->getRequestHeader('POST', $url);
+        $oauthHeader = $oAuth->getRequestHeader('POST', Constants::GARMIN_CONNECT_API_OAUTH_EXCHANGE_USER);
         if ($oauthHeader === false) {
             throw new Exception("failed to generate OAuth2 signature");
         }
@@ -216,7 +214,7 @@ readonly class GarminConnect
             'Content-Type' => Constants::CONTENT_TYPE_FORM_URL_ENCODED
         ];
 
-        $response = $this->curlRequestor->post($url, [], $headers);
+        $response = $this->curlRequestor->post(Constants::GARMIN_CONNECT_API_OAUTH_EXCHANGE_USER, [], $headers);
         $this->logResponse("OAuth2 token", $response);
 
         $token = OAuth2Token::fromJson($response->body);

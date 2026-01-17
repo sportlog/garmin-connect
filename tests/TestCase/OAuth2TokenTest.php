@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Sportlog\GarminConnect\OAuth2Token;
 use Sportlog\GarminConnect\Test\TestCase\FilePath;
 
-class ParseTest extends TestCase
+class OAuth2TokenTest extends TestCase
 {
     public function testParseValidToken(): void
     {

@@ -10,7 +10,7 @@ class Url
      * Build URL.
      * 
      * @param string|string[] $url The URL
-     * @param (string|int)[] $queryParams Params to be appended to the url.
+     * @param (string|int|bool|null)[] $queryParams Params to be appended to the url.
      */
     static function build(string|array $url, array $queryParams): string
     {

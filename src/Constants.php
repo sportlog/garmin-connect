@@ -14,15 +14,14 @@ interface Constants
     const GARMIN_SSO_VERIFY_MFA = self::GARMIN_SSO . '/verifyMFA/loginEnterMfaCode';
     const USER_AGENT = "com.garmin.android.apps.connectmobile";
     const CONTENT_TYPE_FORM_URL_ENCODED = 'application/x-www-form-urlencoded';
+    const GARMIN_CONNECT_API_OAUTH_PREAUTHORIZED = self::GARMIN_CONNECT_API_OAUTH . '/preauthorized';
+    const GARMIN_CONNECT_API_OAUTH_EXCHANGE_USER = self::GARMIN_CONNECT_API_OAUTH . '/exchange/user/2.0';
+
     /**
      * Consumer key and secret for OAuth1 authentication.
      * https://thegarth.s3.amazonaws.com/oauth_consumer.json
      */
     const CONSUMER_KEY = "fc3e99d2-118c-44b8-8ae3-03370dde24c0";
-    /**
-     * Consumer secret for OAuth1 authentication.
-     * https://thegarth.s3.amazonaws.com/oauth_consumer.json
-     */
     const CONSUMER_SECRET = "E08WAR897WEy2knn7aFBrvegVAf0AFdWBBF";
 
     const SSO_EMBED_PARAMS = [

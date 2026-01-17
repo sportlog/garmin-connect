@@ -102,8 +102,6 @@ class CurlRequestor
         $response = curl_exec($handle);
         $statusCode = (int)curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
 
-        curl_close($handle);
-
         if ($response === true) {
             throw new Exception('Curl Option "CURLOPT_RETURNTRANSFER" must be set to true');
         }
