@@ -53,10 +53,16 @@ readonly class GarminConnect
         // 1) set cookie
         $response = $this->curlRequestor->get(Url::build(Constants::GARMIN_SSO_EMBED, Constants::SSO_EMBED_PARAMS));
         $this->logResponse("setCookie", $response);
+        if (!$response->isSuccess()) {
+            throw new Exception("Failed to set cookie, HTTP code {$response->statusCode}");
+        }
 
         // 2) Get login page
         $response = $this->curlRequestor->get(Url::build(Constants::GARMIN_SSO_SIGNIN, Constants::SSO_SIGNIN_PARAMS), ['Referer' => $response->url], true);
         $this->logResponse("getSigninPage", $response);
+        if (!$response->isSuccess()) {
+            throw new Exception("Failed to get signin page, HTTP code {$response->statusCode}");
+        }
 
         $csrfToken = $this->getCsrfToken($response->body);
         if (empty($csrfToken)) {
@@ -67,6 +73,13 @@ readonly class GarminConnect
         // 3) Signin
         $response = $this->signIn($csrfToken, $response->url, $this->username, $password);
         $this->logResponse("Signin", $response);
+        if (!$response->isSuccess()) {
+            if ($response->statusCode === 401) {
+                throw new Exception("Invalid username or password");
+            } else {
+                throw new Exception("Failed to signin, HTTP code {$response->statusCode}");
+            }
+        }
 
         $title = $this->getTitle($response->body);
         if (!empty($title) && str_contains($title, "MFA")) {
@@ -187,6 +200,9 @@ readonly class GarminConnect
 
         $response = $this->curlRequestor->get(Url::build(Constants::GARMIN_CONNECT_API_OAUTH_PREAUTHORIZED, $params), headers: $headers);
         $this->logResponse("getOAuth1Token", $response);
+        if (!$response->isSuccess()) {
+            throw new Exception("Failed to get OAuth1 token, HTTP code {$response->statusCode}");
+        }
 
         $data = [];
         parse_str($response->body, $data);
@@ -216,6 +232,9 @@ readonly class GarminConnect
 
         $response = $this->curlRequestor->post(Constants::GARMIN_CONNECT_API_OAUTH_EXCHANGE_USER, [], $headers);
         $this->logResponse("OAuth2 token", $response);
+        if (!$response->isSuccess()) {
+            throw new Exception("Failed to get OAuth2 token, HTTP code {$response->statusCode}");
+        }
 
         $token = OAuth2Token::fromJson($response->body);
         $this->tokenStorage->saveOAuth2Token($this->id, $token);
